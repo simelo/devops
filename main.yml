@@ -1,6 +1,34 @@
 ---
+
 - hosts: host
+
   remote_user: root
+
+  vars:
+    - golang_version: 1.6
+    - golang_os: linux
+    - golang_arch: amd64
+    - golang_path: "/home/{{ ansible_ssh_user }}"
+
   tasks:
-  - name: test connection
+  - name: Test connection
     ping:
+
+  - name: Download golang
+    get_url: url="https://storage.googleapis.com/golang/go{{ golang_version }}.{{ golang_os }}-{{ golang_arch }}.tar.gz"
+             dest="/usr/local/src/go{{ golang_version }}.{{ golang_os }}-{{ golang_arch }}.tar.gz"
+             validate_certs=no
+
+  - name: Install golang
+    unarchive: src="/usr/local/src/go{{ golang_version }}.{{ golang_os }}-{{ golang_arch }}.tar.gz"
+               dest=/usr/local/
+               copy=no
+
+  - name: Symlink golang
+    file: src="/usr/local/go/bin/{{ item }}"
+          dest="/usr/local/bin/{{ item }}"
+          state=link
+    with_items:
+      - go
+      - godoc
+      - gofmt
