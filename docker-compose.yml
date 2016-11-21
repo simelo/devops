@@ -5,8 +5,10 @@ host:
     - AUTHORIZED_KEYS=${AUTHORIZED_KEYS}
   expose:
     - 22
+    - 6420
   ports:
     - "49154:22"
+    - "6420:6420"
   command: /bin/bash -c "apt-get install python -y && /run.sh"
 
 

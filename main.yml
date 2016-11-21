@@ -1,17 +1,19 @@
 ---
 
 - hosts: host
-
   remote_user: root
 
   vars:
-    - golang_version: 1.6
-    - golang_os: linux
-    - golang_arch: amd64
-    - golang_path: "/home/{{ ansible_ssh_user }}"
+  - golang_version: 1.6
+  - golang_os: linux
+  - golang_arch: amd64
+  - golang_path: "/home/{{ ansible_ssh_user }}"
+
+  environment:
+  - GOPATH: /usr/go
 
   tasks:
-  - name: Test connection
+  - name: Ping
     ping:
 
   - name: Download golang
@@ -29,6 +31,27 @@
           dest="/usr/local/bin/{{ item }}"
           state=link
     with_items:
-      - go
-      - godoc
-      - gofmt
+    - go
+    - godoc
+    - gofmt
+
+  - name: Install git
+    shell: apt-get update && apt-get install git-core -y
+
+  - name: Get glock
+    shell: go get github.com/robfig/glock
+
+  - name: Symlink glock
+    file: src="/usr/go/bin/glock"
+          dest="/usr/local/bin/glock"
+          state=link
+
+  - name: Get skycoin
+    shell: go get github.com/skycoin/skycoin
+    ignore_errors: yes
+
+  - name: Sync skycoin dependencies
+    shell: glock sync github.com/skycoin/skycoin
+
+  - name: Run the wallet
+    shell: export GOPATH=/usr/go && $GOPATH/src/github.com/skycoin/skycoin/run.sh 
