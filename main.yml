@@ -36,7 +36,10 @@
     - gofmt
 
   - name: Install git
-    shell: apt-get update && apt-get install git-core -y
+    action: apt pkg=git-core state=installed
+
+  - name: Install supervisor
+    action: apt pkg=supervisor state=installed
 
   - name: Get glock
     shell: go get github.com/robfig/glock
@@ -53,5 +56,8 @@
   - name: Sync skycoin dependencies
     shell: glock sync github.com/skycoin/skycoin
 
-  - name: Run the wallet
-    shell: export GOPATH=/usr/go && $GOPATH/src/github.com/skycoin/skycoin/run.sh 
+  - name: Copy supervisor configuration
+    copy: src=supervisord.conf dest=/etc/supervisor/conf.d/supervisord.conf
+
+  - name: Run skycoin
+    shell: supervisord
