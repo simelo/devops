@@ -1,0 +1,45 @@
+---
+
+- name: Download golang
+  get_url: url="https://storage.googleapis.com/golang/go{{ golang_version }}.{{ golang_os }}-{{ golang_arch }}.tar.gz"
+           dest="/usr/local/src/go{{ golang_version }}.{{ golang_os }}-{{ golang_arch }}.tar.gz"
+           validate_certs=no
+
+- name: Install golang
+  unarchive: src="/usr/local/src/go{{ golang_version }}.{{ golang_os }}-{{ golang_arch }}.tar.gz"
+             dest=/usr/local/
+             copy=no
+
+- name: Symlink golang
+  file: src="/usr/local/go/bin/{{ item }}"
+        dest="/usr/local/bin/{{ item }}"
+        state=link
+  with_items:
+  - go
+  - godoc
+  - gofmt
+
+- name: Install git
+  action: apt pkg=git-core state=installed
+
+- name: Install curl
+  action: apt pkg=curl state=installed
+
+- name: Install supervisor
+  action: apt pkg=supervisor state=installed
+
+- name: Get glock
+  shell: go get github.com/robfig/glock
+
+- name: Symlink glock
+  file: src="/usr/go/bin/glock"
+        dest="/usr/local/bin/glock"
+        state=link
+
+- name: Install gox
+  shell: go get github.com/mitchellh/gox
+
+- name: Symlink gox
+  file: src="/usr/go/bin/gox"
+        dest="/usr/local/bin/gox"
+        state=link

@@ -7,94 +7,14 @@
   - golang_version: 1.6
   - golang_os: linux
   - golang_arch: amd64
-  - golang_path: "/home/{{ ansible_ssh_user }}"
   - gopath: /usr/go
 
   environment:
   - GOPATH: /usr/go
 
   tasks:
-  - name: Ping
-    ping:
+  - include: tasks/init.yml
+  - include: tasks/skycoin.yml
+  - include: tasks/mzcoin.yml
 
-  - name: Download golang
-    get_url: url="https://storage.googleapis.com/golang/go{{ golang_version }}.{{ golang_os }}-{{ golang_arch }}.tar.gz"
-             dest="/usr/local/src/go{{ golang_version }}.{{ golang_os }}-{{ golang_arch }}.tar.gz"
-             validate_certs=no
 
-  - name: Install golang
-    unarchive: src="/usr/local/src/go{{ golang_version }}.{{ golang_os }}-{{ golang_arch }}.tar.gz"
-               dest=/usr/local/
-               copy=no
-
-  - name: Symlink golang
-    file: src="/usr/local/go/bin/{{ item }}"
-          dest="/usr/local/bin/{{ item }}"
-          state=link
-    with_items:
-    - go
-    - godoc
-    - gofmt
-
-  - name: Install git
-    action: apt pkg=git-core state=installed
-
-  - name: Install curl
-    action: apt pkg=curl state=installed
-
-  - name: Install supervisor
-    action: apt pkg=supervisor state=installed
-
-  - name: Get glock
-    shell: go get github.com/robfig/glock
-
-  - name: Symlink glock
-    file: src="/usr/go/bin/glock"
-          dest="/usr/local/bin/glock"
-          state=link
-
-  - name: Install gox
-    shell: go get github.com/mitchellh/gox
-
-  - name: Symlink gox
-    file: src="/usr/go/bin/gox"
-          dest="/usr/local/bin/gox"
-          state=link
-
-  - name: Get skycoin
-    shell: go get github.com/skycoin/skycoin
-    ignore_errors: yes
-
-  - name: Sync skycoin dependencies
-    shell: glock sync github.com/skycoin/skycoin
-
-  - name: Copy supervisor configuration
-    copy: src=supervisord.conf dest=/etc/supervisor/conf.d/supervisord.conf
-
-  - name: Run skycoin
-    shell: supervisord
-
-  - name: Node installation prerequisites
-    shell: curl -sL https://deb.nodesource.com/setup_6.x | bash -
-
-  - name: Install Node
-    action: apt pkg=nodejs-legacy state=installed
-
-  - name: Clean Node cache
-    shell: npm cache clean -f && npm install -g n
-
-  - name: Install n
-    shell: npm install -g n
-
-  - name: Install gulp
-    shell: npm install --global gulp-cli
-
-  - name: Install wallet dependencies
-    command: chdir="{{ gopath }}/src/github.com/skycoin/skycoin/electron" npm install
-
-  - name: Build wallet
-    shell: chdir="{{ gopath }}/src/github.com/skycoin/skycoin/electron" ./build.sh
-    ignore_errors: yes
-
-  - name: Expose built app
-    shell: cp -r "{{ gopath }}/src/github.com/skycoin/skycoin/electron/.standalone_output/." /usr/build/

@@ -1,0 +1,8 @@
+---
+
+- name: Get mzcoin
+  shell: go get github.com/ShanghaiKuaibei/mzcoin
+  ignore_errors: yes
+
+- name: Sync mzcoin dependencies
+  shell: glock sync github.com/ShanghaiKuaibei/mzcoin
