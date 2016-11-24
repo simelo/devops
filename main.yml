@@ -8,6 +8,7 @@
   - golang_os: linux
   - golang_arch: amd64
   - golang_path: "/home/{{ ansible_ssh_user }}"
+  - gopath: /usr/go
 
   environment:
   - GOPATH: /usr/go
@@ -38,6 +39,9 @@
   - name: Install git
     action: apt pkg=git-core state=installed
 
+  - name: Install curl
+    action: apt pkg=curl state=installed
+
   - name: Install supervisor
     action: apt pkg=supervisor state=installed
 
@@ -47,6 +51,14 @@
   - name: Symlink glock
     file: src="/usr/go/bin/glock"
           dest="/usr/local/bin/glock"
+          state=link
+
+  - name: Install gox
+    shell: go get github.com/mitchellh/gox
+
+  - name: Symlink gox
+    file: src="/usr/go/bin/gox"
+          dest="/usr/local/bin/gox"
           state=link
 
   - name: Get skycoin
@@ -61,3 +73,28 @@
 
   - name: Run skycoin
     shell: supervisord
+
+  - name: Node installation prerequisites
+    shell: curl -sL https://deb.nodesource.com/setup_6.x | bash -
+
+  - name: Install Node
+    action: apt pkg=nodejs-legacy state=installed
+
+  - name: Clean Node cache
+    shell: npm cache clean -f && npm install -g n
+
+  - name: Install n
+    shell: npm install -g n
+
+  - name: Install gulp
+    shell: npm install --global gulp-cli
+
+  - name: Install wallet dependencies
+    command: chdir="{{ gopath }}/src/github.com/skycoin/skycoin/electron" npm install
+
+  - name: Build wallet
+    shell: chdir="{{ gopath }}/src/github.com/skycoin/skycoin/electron" ./build.sh
+    ignore_errors: yes
+
+  - name: Expose built app
+    shell: cp -r "{{ gopath }}/src/github.com/skycoin/skycoin/electron/.standalone_output/." /usr/build/

@@ -3,6 +3,8 @@ host:
   environment:
     - ROOT_PASS=${ROOT_PASS}
     - AUTHORIZED_KEYS=${AUTHORIZED_KEYS}
+  volumes:
+    - ./build:/usr/build
   expose:
     - 22
     - 6420
