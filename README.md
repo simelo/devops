@@ -1,7 +1,7 @@
 # devops
 Ansible script with additional demo environment. Two containers are provided:
 * `host` - clean Debian with ssh server
-* `ansible` - additional controller which runs Ansible)
+* `ansible` - additional controller which runs Ansible
 
 After `host` boots, `ansible` executes installation playbook through predefined ssh credentials,
 which are also provided.
