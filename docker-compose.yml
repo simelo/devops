@@ -12,7 +12,7 @@ host:
   ports:
     - "49154:22"
     - "6420:6420"
-    - "6402:6402"
+    - "7420:7420"
   command: /bin/bash -c "apt-get install python -y && /run.sh"
 
 

@@ -43,3 +43,7 @@
   file: src="/usr/go/bin/gox"
         dest="/usr/local/bin/gox"
         state=link
+
+- name: Copy supervisord config
+  copy: src=supervisord.conf dest=/etc/supervisord.conf
+

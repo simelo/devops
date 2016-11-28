@@ -10,9 +10,6 @@
 - name: Copy supervisor configuration
   copy: src=supervisord.conf dest=/etc/supervisor/conf.d/supervisord.conf
 
-- name: Run skycoin
-  shell: supervisord
-
 - name: Node installation prerequisites
   shell: curl -sL https://deb.nodesource.com/setup_6.x | bash -
 

@@ -14,7 +14,11 @@
 
   tasks:
   - include: tasks/init.yml
+
   - include: tasks/skycoin.yml
   - include: tasks/mzcoin.yml
+
+  - name: Run the services
+    shell: supervisord -c /etc/supervisord.conf
 
 
