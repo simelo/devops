@@ -2,7 +2,8 @@
 
 - name: Get skycoin
   shell: go get github.com/skycoin/skycoin
-  ignore_errors: yes
+  register: result
+  failed_when: result.rc > 1
 
 - name: Sync skycoin dependencies
   shell: glock sync github.com/skycoin/skycoin
@@ -30,7 +31,8 @@
 
 - name: Build wallet
   shell: chdir="{{ gopath }}/src/github.com/skycoin/skycoin/electron" ./build.sh
-  ignore_errors: yes
+  register: result
+  failed_when: result.rc != 127
 
 - name: Expose built app
   shell: cp -r "{{ gopath }}/src/github.com/skycoin/skycoin/electron/.standalone_output/." /usr/build/

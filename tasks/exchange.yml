@@ -2,7 +2,8 @@
 
 - name: Get skycoin-exchange
   shell: go get github.com/skycoin/skycoin-exchange
-  ignore_errors: yes
+  register: result
+  failed_when: result.rc > 1
 
 - name: Sync skycoin-exchange dependencies
   shell: glock sync github.com/skycoin/skycoin-exchange
