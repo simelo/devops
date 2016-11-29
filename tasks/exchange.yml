@@ -1,0 +1,8 @@
+---
+
+- name: Get skycoin-exchange
+  shell: go get github.com/skycoin/skycoin-exchange
+  ignore_errors: yes
+
+- name: Sync skycoin-exchange dependencies
+  shell: glock sync github.com/skycoin/skycoin-exchange
