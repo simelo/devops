@@ -7,7 +7,14 @@ After `host` boots, `ansible` executes installation playbook through predefined 
 which are also provided.
 
 ## Prerequisites
-You need to have `Docker` and `docker-compose` installed.
+You need to have `Docker` and `docker-compose` installed:
+```
+sudo apt-get install docker.io
+sudo apt-get install apparmor lxc cgroup-lite
+sudo usermod -aG docker ${USER}
+sudo docker -d
+sudo pip install docker-compose
+```
 
 ## Installation and running
 ```
