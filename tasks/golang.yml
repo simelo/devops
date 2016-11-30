@@ -1,0 +1,21 @@
+---
+
+- name: Download golang
+  get_url: url="https://storage.googleapis.com/golang/go{{ golang_version }}.{{ golang_os }}-{{ golang_arch }}.tar.gz"
+           dest="{{ golang_installation }}/go{{ golang_version }}.{{ golang_os }}-{{ golang_arch }}.tar.gz"
+           validate_certs=no
+
+- name: Install golang
+  unarchive: src="{{ golang_installation }}/go{{ golang_version }}.{{ golang_os }}-{{ golang_arch }}.tar.gz"
+             dest=/usr/local/
+             copy=no
+
+- name: Symlink golang
+  file: src="/usr/local/go/bin/{{ item }}"
+        dest="{{ binaries_dir }}/{{ item }}"
+        state=link
+  with_items:
+  - go
+  - godoc
+  - gofmt
+

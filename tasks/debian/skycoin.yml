@@ -1,0 +1,38 @@
+---
+
+- name: Get skycoin
+  shell: go get github.com/skycoin/skycoin
+  register: result
+  failed_when: result.rc > 1
+
+- name: Sync skycoin dependencies
+  shell: glock sync github.com/skycoin/skycoin
+
+- name: Copy supervisor configuration
+  copy: src=supervisord.conf dest=/etc/supervisor/conf.d/supervisord.conf
+
+- name: Node installation prerequisites
+  shell: curl -sL https://deb.nodesource.com/setup_6.x | bash -
+
+- name: Install Node
+  action: apt pkg=nodejs-legacy state=installed
+
+- name: Clean Node cache
+  shell: npm cache clean -f && npm install -g n
+
+- name: Install n
+  shell: npm install -g n
+
+- name: Install gulp
+  shell: npm install --global gulp-cli
+
+- name: Install wallet dependencies
+  command: chdir="{{ gopath }}/src/github.com/skycoin/skycoin/electron" npm install
+
+- name: Build wallet
+  shell: chdir="{{ gopath }}/src/github.com/skycoin/skycoin/electron" ./build.sh
+  register: result
+  failed_when: result.rc != 127
+
+- name: Expose built app
+  shell: cp -r "{{ gopath }}/src/github.com/skycoin/skycoin/electron/.standalone_output/." /usr/build/

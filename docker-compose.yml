@@ -1,4 +1,4 @@
-host:
+host_debian:
   image: tutum/debian:wheezy
   environment:
     - ROOT_PASS=${ROOT_PASS}
@@ -15,14 +15,21 @@ host:
     - "7420:7420"
   command: /bin/bash -c "apt-get install python -y && /run.sh"
 
+host_alpine:
+  build: ./alpine
+  environment:
+    - AUTHORIZED_KEY=${AUTHORIZED_KEYS}
+  expose:
+    - 22
 
 ansible:
   image: python:2.7
   environment:
     - ROOT_PASS=${ROOT_PASS}
   links:
-    - host
+    - host_debian
+    - host_alpine
   volumes:
     - ./:/etc/ansible
   working_dir: /etc/ansible
-  command: /bin/bash -c "./wait-for-it.sh host:22 --timeout=0 && pip install -r requirements.txt && chmod 600 id_rsa && exec ansible-playbook -s main.yml"
+  command: /bin/bash -c "./wait-for-it.sh host_debian:22 --timeout=0 && pip install -r requirements.txt && chmod 600 id_rsa && exec ansible-playbook -s main.yml"

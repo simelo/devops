@@ -1,0 +1,9 @@
+---
+
+golang_version: 1.6
+golang_os: linux
+golang_arch: amd64
+gopath: /usr/go
+golang_installation: /usr/local/src
+
+binaries_dir: /usr/local/bin

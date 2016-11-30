@@ -1,23 +1,38 @@
 ---
 
-- hosts: host
+- hosts: host_alpine
   remote_user: root
 
   vars:
-  - golang_version: 1.6
-  - golang_os: linux
-  - golang_arch: amd64
-  - gopath: /usr/go
+  - golang_installation: /usr/local
+  - binaries_dir: /usr/bin
+
+  tasks:
+  - name: Update packages
+    shell: apk update
+  - name: Get GNU tar
+    shell: apk add tar
+
+  - include: tasks/golang.yml
+
+
+- hosts: host_debian
+  remote_user: root
+
+  vars:
+  - golang_installation: /usr/local/src
 
   environment:
   - GOPATH: /usr/go
 
   tasks:
-  - include: tasks/init.yml
+  - include: tasks/golang.yml
+  - include: tasks/debian/init.yml
 
-  - include: tasks/skycoin.yml
-  - include: tasks/mzcoin.yml
-  - include: tasks/exchange.yml
+  - include: tasks/debian/skycoin.yml
+  - include: tasks/debian/mzcoin.yml
+  - include: tasks/debian/exchange.yml
 
   - name: Run the services
     shell: supervisord -c /etc/supervisord.conf
+
