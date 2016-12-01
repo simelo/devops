@@ -36,7 +36,7 @@ docker-compose stop
 ```
 docker-compose rm
 ```
-To may also add options to remove containers' volumes and make force remove
+You can also add options to remove containers' volumes and make force remove:
 ```
 docker-compose rm -fv
 ```
