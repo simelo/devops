@@ -25,5 +25,8 @@
         dest="/usr/local/bin/gox"
         state=link
 
+- name: Create logs directory
+  shell: mkdir -p /var/log/supervisor/debian
+
 - name: Copy supervisord config
-  copy: src=supervisord.conf dest=/etc/supervisord.conf
+  copy: src=supervisor/debian.conf dest=/etc/supervisord.conf

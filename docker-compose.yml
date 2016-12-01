@@ -4,7 +4,8 @@ host_debian:
     - ROOT_PASS=${ROOT_PASS}
     - AUTHORIZED_KEYS=${AUTHORIZED_KEYS}
   volumes:
-    - ./build:/usr/build
+    - ./release:/usr/build
+    - ./logs/debian:/var/log/supervisor/debian
   expose:
     - 22
     - 6420
@@ -16,7 +17,9 @@ host_debian:
   command: /bin/bash -c "apt-get install python -y && /run.sh"
 
 host_alpine:
-  build: ./alpine
+  build: ./images/alpine
+  volumes:
+    - ./logs/alpine:/var/log/supervisor/alpine
   environment:
     - AUTHORIZED_KEY=${AUTHORIZED_KEYS}
   expose:

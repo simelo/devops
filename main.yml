@@ -7,6 +7,9 @@
   - golang_installation: /usr/local
   - binaries_dir: /usr/bin
 
+  environment:
+  - GOPATH: /usr/go
+
   tasks:
   - name: Update packages
     shell: apk update
@@ -14,6 +17,11 @@
     shell: apk add tar
 
   - include: tasks/golang.yml
+  - include: tasks/alpine/init.yml
+  - include: tasks/alpine/skycoin.yml
+
+  - name: Run the services
+    shell: supervisord -c /etc/supervisord.conf
 
 
 - hosts: host_debian
