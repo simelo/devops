@@ -34,6 +34,10 @@
   - GOPATH: /usr/go
 
   tasks:
+  - name: Update all packages to the latest version
+    apt:
+      upgrade: dist
+
   - include: tasks/golang.yml
   - include: tasks/debian/init.yml
 
