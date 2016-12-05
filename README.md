@@ -60,3 +60,19 @@ You can also execute single commands without getting bash session:
 ```
 docker exec <container name> <command> <arg1> <arg2> ...
 ```
+
+## Images management
+### List images that are available locally
+```
+docker images
+```
+
+### Pull image from DockerHub
+```
+docker pull <image name>
+```
+
+### Remove local image
+```
+docker rmi <image name>
+```
