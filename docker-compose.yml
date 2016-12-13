@@ -35,4 +35,4 @@ ansible:
   volumes:
     - ./:/etc/ansible
   working_dir: /etc/ansible
-  command: /bin/bash -c "./wait-for-it.sh host_debian:22 --timeout=0 && pip install -r requirements.txt && chmod 600 id_rsa && exec ansible-playbook -s main.yml"
+  command: /bin/bash -c "./wait-for-it.sh host_debian:22 --timeout=0 && pip install  --trusted-host mirrors.aliyun.com -i http://mirrors.aliyun.com/pypi/simple/ -r requirements.txt && chmod 600 id_rsa && exec ansible-playbook -s main.yml"
