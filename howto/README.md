@@ -53,4 +53,119 @@ Now the debian container with SSHD is running, we can ssh into that container(se
 	docker rm -f my-virgin-debian
 	docker run --name my-virgin-debian -d -p 2222:22 -e SSH_KEY="$(cat ~/.ssh/id_rsa.pub)" krlmlr/debian-ssh 
 	```
-	 
+
+## Install docker and docker-compose
+### Prerequisites
+* 64-bit Linux installation
+* Version 3.10 or higher of the linux kernel  
+To check kernel version with  
+
+```bash
+$ uname -r  
+3.19.0-42-generic
+```
+### Ubuntu
+#### (China)Apply apt sources
+* Download respective `sources.list` file from below links
+    * precise(12.04) - http://mirrors.163.com/.help/sources.list.precise
+    * trusty(14.04) - http://mirrors.163.com/.help/sources.list.trusty
+    * vivid(15.04) - http://mirrors.163.com/.help/sources.list.vivid
+* Override `/etc/apt/sources.list` with downloaded file
+* Execute `sudo apt-get update`
+
+#### Install Docker Engine
+Follow the instructions here - https://docs.docker.com/engine/installation/linux/ubuntulinux/  
+#### Install Docker Compose
+Follow instructons here - https://docs.docker.com/compose/install/
+### CentOS
+#### (China)Use `yum` repository
+* Backup the old one
+
+```bash
+$ mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+```
+* Download respective repo files from below links and save to `/etc/yum.repos.d/`
+    * CentOS7 - http://mirrors.163.com/.help/CentOS7-Base-163.repo
+* Rebuild the cache
+
+```bash
+$ yum clean all
+$ yum makecache
+```
+#### Install Docker Engine
+Follow the instructions here - https://docs.docker.com/engine/installation/linux/centos/
+#### Install Docker Compose
+Follow instructions here - https://docs.docker.com/compose/install/
+## Using mirrors for servers in China
+### apt-get
+Please refer to [(China)Apply apt sources](# (China)Apply apt sources).
+### yum
+Please refer to [(China)Use `yum` repository](#(China)Use `yum` repository).
+### apk
+Add `http://mirrors.aliyun.com/alpine/{VERSION}/main/` to the beginning of file `/etc/apk/repositories`.
+***NOTE*** `{VERSION}` need to be replaced by actual version strings, such as `v3.2`, `v3.3` etc.
+### pip
+Update `~/.pip/pip.conf` file as below shows.
+
+```info
+[global]
+index-url = http://mirrors.aliyun.com/pypi/simple/
+
+[install]
+trusted-host=mirrors.aliyun.com
+```
+Or Use the mirror directly in the commands as -
+
+```bash 
+pip install --trusted-host mirrors.aliyun.com -i http://mirrors.aliyun.com/pypi/simple/ --upgrade pip
+```
+### Docker registry
+This section about how to use aliyun docker images services.  
+
+* Create an Aliyun account(free)
+* Go to https://cr.console.aliyun.com and login with your account
+* Click "加速器" on the left sub-menu
+
+![](images/docker-mirror-1.png)  
+
+* Get your exclusive mirror address
+
+![](images/docker-mirror-2.png)
+
+* if your system is Ubuntu 12.04/14.04, and Docker 1.9 or later.
+
+```bash
+echo "DOCKER_OPTS=\"\$DOCKER_OPTS --registry-mirror=https://xxxxxxx.mirror.aliyuncs.com\"" \
+| sudo tee -a /etc/default/docker
+sudo service docker restart
+```
+* For systems Ubuntu 15.04/16.04 and Docker 1.9 or later
+
+```bash
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo tee /etc/systemd/system/docker.service.d/mirror.conf <<-'EOF'
+[Service]
+ExecStart=
+ExecStart=/usr/bin/docker daemon -H fd:// --registry-mirror=https://xxxxxx.mirror.aliyuncs.com
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+* For CentOS 7, and Docker 1.9 or later 
+
+```bash
+sudo cp -n /lib/systemd/system/docker.service /etc/systemd/system/docker.service
+sudo sed -i "s|ExecStart=/usr/bin/docker daemon|ExecStart=/usr/bin/docker daemon \
+--registry-mirror=https://xxxxxx.mirror.aliyuncs.com|g" /etc/systemd/system/docker.service
+sudo systemctl daemon-reload
+sudo service docker restart
+```
+
+***NOTE*** Please replace `xxxxxx.mirror.aliyuncs.com` with your own link.
+### Others
+There are other mirrors/services available for developers in China.
+
+* Netease - http://mirrors.163.com/
+* Aliyun - http://mirrors.aliyun.com/
+* NPM - https://npm.taobao.org/
