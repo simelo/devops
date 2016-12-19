@@ -5,5 +5,5 @@
   register: result
   failed_when: result.rc > 1
 
-- name: Sync skycoin-exchange dependencies
-  shell: glock sync github.com/skycoin/skycoin-exchange
+# - name: Sync skycoin-exchange dependencies
+#   shell: glock sync github.com/skycoin/skycoin-exchange

@@ -5,5 +5,5 @@
   register: result
   failed_when: result.rc > 1
 
-- name: Sync mzcoin dependencies
-  shell: glock sync github.com/ShanghaiKuaibei/mzcoin
+# - name: Sync mzcoin dependencies
+#   shell: glock sync github.com/ShanghaiKuaibei/mzcoin

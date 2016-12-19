@@ -9,13 +9,13 @@
 - name: Install supervisor
   shell: bash -c "apk add supervisor"
 
-- name: Get glock
-  shell: bash -c "go get github.com/robfig/glock"
-
-- name: Symlink glock
-  file: src="/usr/go/bin/glock"
-        dest="{{ binaries_dir }}/glock"
-        state=link
+# - name: Get glock
+#   shell: bash -c "go get github.com/robfig/glock"
+#
+# - name: Symlink glock
+#   file: src="/usr/go/bin/glock"
+#         dest="{{ binaries_dir }}/glock"
+#         state=link
 
 - name: Create logs directory
   shell: bash -c "mkdir -p /var/log/supervisor/alpine"

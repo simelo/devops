@@ -9,13 +9,13 @@
 - name: Install supervisor
   action: apt pkg=supervisor state=installed
 
-- name: Get glock
-  shell: go get github.com/robfig/glock
-
-- name: Symlink glock
-  file: src="/usr/go/bin/glock"
-        dest="/usr/local/bin/glock"
-        state=link
+# - name: Get glock
+#   shell: go get github.com/robfig/glock
+#
+# - name: Symlink glock
+#   file: src="/usr/go/bin/glock"
+#         dest="/usr/local/bin/glock"
+#         state=link
 
 - name: Install gox
   shell: go get github.com/mitchellh/gox

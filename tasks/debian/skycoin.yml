@@ -5,8 +5,8 @@
   register: result
   failed_when: result.rc > 1
 
-- name: Sync skycoin dependencies
-  shell: glock sync github.com/skycoin/skycoin
+# - name: Sync skycoin dependencies
+#   shell: glock sync github.com/skycoin/skycoin
 
 - name: Node installation prerequisites
   shell: curl -sL https://deb.nodesource.com/setup_6.x | bash -
