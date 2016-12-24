@@ -6,6 +6,7 @@ host_debian:
   volumes:
     - ./release:/usr/build
     - ./logs/debian:/var/log/supervisor/debian
+    - ./shares:/shares:ro
   expose:
     - 22
     - 6420
@@ -20,6 +21,7 @@ host_alpine:
   build: ./images/alpine
   volumes:
     - ./logs/alpine:/var/log/supervisor/alpine
+    - ./shares:/shares:ro
   environment:
     - AUTHORIZED_KEY=${AUTHORIZED_KEYS}
   expose:
@@ -34,5 +36,6 @@ ansible:
     - host_alpine
   volumes:
     - ./:/etc/ansible
+    - ./shares:/shares:ro
   working_dir: /etc/ansible
   command: /bin/bash -c "./wait-for-it.sh host_debian:22 --timeout=0 && pip install  --trusted-host mirrors.aliyun.com -i http://mirrors.aliyun.com/pypi/simple/ -r requirements.txt && chmod 600 id_rsa && exec ansible-playbook -s main.yml"
