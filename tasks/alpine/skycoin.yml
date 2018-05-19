@@ -1,9 +1,0 @@
----
-
-- name: Get skycoin
-  shell: go get github.com/skycoin/skycoin
-  register: result
-  failed_when: result.rc > 1
-
-# - name: Sync skycoin dependencies
-#   shell: bash -c "glock sync github.com/skycoin/skycoin"
