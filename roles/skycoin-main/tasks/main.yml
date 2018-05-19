@@ -1,0 +1,11 @@
+- name: Install Skycoin main node
+  docker_container:
+    name: skycoin-main
+    image: skycoin/skycoin
+    volumes:
+      - skycoin-data:/data/.skycoin
+      - skycoin-wallet:/wallet
+    exposed_ports:
+      - 6000
+      - 6420
+    command: -master -master-secret-key={{ master_seckey }}  -master-public-key={{ master_pubkey }}

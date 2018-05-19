@@ -1,0 +1,13 @@
+---
+
+- hosts: all
+  remote_user: root
+  roles:
+    - docker
+
+- hosts: skycoin-main
+  remote_user: root
+  roles:
+    - skycoin-main
+  vars_files:
+    - vars/external_vars.yml
