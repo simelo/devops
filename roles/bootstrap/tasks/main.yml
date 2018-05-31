@@ -1,0 +1,61 @@
+---
+# Sets a variable with the public key file location
+- name: Set public key file
+  set_fact:
+    my_ssh_key: "{{ lookup('env','HOME') }}/.ssh/id_rsa.pub"
+
+# Installs sudo 
+- name: Install sudo
+  package:
+    name: sudo
+    state: present
+
+# Adds the skycoin user and adds it to the sudo group
+- name: Add administrator
+  user: name=administrator groups=sudo,
+
+# Disables login for root user
+- name: Disable root
+  user: name=root shell=/bin/false update_password=on_create
+
+# Installs public key
+- name: Install pubkey
+  authorized_key: 
+    user: administrator 
+    key: "{{ lookup('file', my_ssh_key) }}" 
+    exclusive: yes
+    
+# Don't ask sudoers for password
+- lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^%sudo'
+    line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+# Installs sftp-server
+- name: Install sftp-server
+  package:
+    name: openssh-sftp-server
+    state: present
+
+# Configures sshd
+- name: Configure SSH
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    backup: 'yes'
+    mode: 0644
+    owner: root
+    group: root
+
+# Restarts sshd service
+- name: Restart SSH
+  service:
+    name: sshd
+    state: restarted
+
+# Configures firewall
+- import_tasks: firewall.yml
+  when: "ansible_distribution == 'Debian'"
+...

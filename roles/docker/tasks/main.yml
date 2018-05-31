@@ -4,3 +4,7 @@
   when: "ansible_distribution == 'Debian'"
   tags:
     - docker
+
+- name: Create skycoin network
+  docker_network:
+    name: skycoin

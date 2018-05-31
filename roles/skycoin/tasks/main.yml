@@ -1,0 +1,30 @@
+- name: Run Skycoin main node
+  docker_container:
+    name: skycoin
+    image: skycoin/skycoin:release-v0.23.0
+    volumes:
+      - /skycoin/skycoin-data:/data/.skycoin
+      - /skycoin/skycoin-wallet:/wallet
+    networks:
+      - name: skycoin
+
+- name: Run skycoin-explorer
+  docker_container:
+    name: skycoin-explorer
+    image: skycoin/skycoin-explorer
+    env:
+      VIRTUAL_HOST: "{{ virtualhost }}"
+      VIRTUAL_PORT: 8001
+      SKYCOIN_ADDR: http://skycoin:6420
+    networks:
+      - name: skycoin
+
+- name: Run nginx-proxy
+  docker_container:
+    name: nginx-proxy
+    image: jwilder/nginx-proxy:alpine
+    volumes: /var/run/docker.sock:/tmp/docker.sock:ro
+    ports:
+    - "80:80"
+    networks:
+      - name: skycoin
