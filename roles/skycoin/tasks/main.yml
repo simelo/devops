@@ -28,3 +28,11 @@
     - "80:80"
     networks:
       - name: skycoin
+
+- name: allow http ufw
+  become: 'yes'
+  become_method: sudo
+  ufw:
+    rule: allow
+    port: 80
+    proto: tcp
