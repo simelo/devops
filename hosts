@@ -2,4 +2,7 @@
 skycoin-main.example.com
 
 [skycoin]
-skycoin.example.com virtualhost="skycoin.example.com"
+skycoin.example.com
+
+[skycoin-explorer]
+skycoin-explorer.example.com virtualhost="skycoin-explorer.example.com"

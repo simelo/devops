@@ -19,3 +19,9 @@
   become: yes
   roles:
     - skycoin
+
+- hosts: skycoin-explorer
+  remote_user: administrator
+  become: yes
+  roles:
+    - skycoin-explorer

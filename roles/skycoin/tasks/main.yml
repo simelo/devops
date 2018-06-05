@@ -1,0 +1,9 @@
+- name: Run Skycoin main node
+  docker_container:
+    name: skycoin
+    image: skycoin/skycoin:release-v0.23.0
+    volumes:
+      - /skycoin/skycoin-data:/data/.skycoin
+      - /skycoin/skycoin-wallet:/wallet
+    networks:
+      - name: skycoin
