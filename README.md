@@ -25,7 +25,8 @@ On the server side the playbook expects the following:
 The `hosts`file in the root of the project must be filled with the hosts you are going to install. There are two groups right now:
 
 - `[skycoin-main]` Skycoin in master mode will  be installed on these hosts.
-- `[skycoin]` Skycoin, Skycoin-explorer and an nginx proxy will be installed will  be installed on these hosts. You must define the `virtualhost` variable for every host, as it will be used to configure the web server virtualhost.
+- `[skycoin]` Skycoin will be installed on these hosts.
+- `[skycoin-explorer]` Skycoin, Skycoin-explorer and an nginx proxy will be installed on these hosts. You must define the `virtualhost` variable for every host, as it will be used to configure the web server virtualhost.
 
 ## Running the tasks
 
